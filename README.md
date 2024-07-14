@@ -1,2 +1,2 @@
 # CSES-Forward-Tester
-Test CSES submissions on the client side
+Utility to test CSES submissions on the client side
