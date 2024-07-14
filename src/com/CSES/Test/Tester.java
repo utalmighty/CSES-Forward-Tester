@@ -33,10 +33,12 @@ public class Tester {
                 System.out.println("✅ ("+ timeTakenInMillis +"ms)");
             }
             else {
-                System.out.println("❌ (" + timeTakenInMillis + "ms) Expected: ");
+                System.out.println("❌ (" + timeTakenInMillis + "ms)");
+                System.out.println("Expected: ");
                 printContentOfFile(outputFile);
                 System.err.println("Actual: ");
                 printContentOfFile(ARTIFACT_FILE);
+                return;
             }
         }
     }
