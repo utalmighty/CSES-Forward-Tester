@@ -3,6 +3,7 @@ package com.CSES.Test;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
+import java.util.Iterator;
 
 public class Tester {
 
@@ -57,14 +58,21 @@ public class Tester {
 
     private static void compareOutput(int testNumber, String outputFile, String actualFile) throws FileNotFoundException, IOException {
         System.out.print("Test: " + testNumber + " ");
-        System.out.print("Expected: " + expected + " ");
-        String expected = getReader(outputFile).readLine();
-        String actual = getReader(actualFile).readLine();
-        System.out.print("Actual: ");
-        if (expected.equals(actual)) {
-            System.out.println(actual);
-        } else {
-            System.err.println(actual);
+        Stream<String> expectedOutput = getReader(outputFile).lines();
+        Stream<String> actualOutput = getReader(actualFile).lines();
+        Iterator<String> iter1 = expectedOutput.iterator(), iter2 = actualOutput.iterator();
+        while (iter1.hasNext() && iter2.hasNext()) {
+            String expected = iter1.next();
+            String actual = iter2.next();
+            if(!expected.equals(actual)) {
+                System.err.println("❌");
+                return;
+            }
         }
+        if (iter1.hasNext() != iter2.hasNext()) {
+            System.out.println("❌");
+            return;
+        }
+        System.out.println("✅");
     }
 }
