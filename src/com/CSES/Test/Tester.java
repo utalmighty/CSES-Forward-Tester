@@ -14,7 +14,7 @@ public class Tester {
 
     public static void main(String[] args) throws IOException {
         String dir = ""; // Test folder path
-        CSES solution; // Replace with solution
+        CSES solution; // Replace with solution class
         runTests(dir, solution);
     }
 
@@ -24,10 +24,26 @@ public class Tester {
         for (int test=1; test <= numberOfTests; test++) {
             String intputFile = test + INPUT;
             clearFileContents(ARTIFACT_FILE);
+            long start = System.currentTimeMillis();
             runUserSolution(solution, path + intputFile, ARTIFACT_FILE);
-            String outputFile = test + OUTPUT;
-            compareOutput(test, path + outputFile, ARTIFACT_FILE);
+            long timeTakenInMillis = System.currentTimeMillis() - start;
+            String outputFile = path + test + OUTPUT;
+            System.out.print("Test: "+ test + " ");
+            if (compareOutput(outputFile, ARTIFACT_FILE)) {
+                System.out.println("✅ ("+ timeTakenInMillis +"ms)");
+            }
+            else {
+                System.out.println("❌ (" + timeTakenInMillis + "ms) Expected: ");
+                printContentOfFile(outputFile);
+                System.err.println("Actual: ");
+                printContentOfFile(ARTIFACT_FILE);
+            }
         }
+    }
+
+    private static void printContentOfFile(String file) throws FileNotFoundException {
+        Stream<String> content = getReader(file).lines();
+        content.forEach(Sytem.out::println);
     }
 
     private static void clearFileContents(String file) throws IOException {
@@ -56,23 +72,14 @@ public class Tester {
         return files/2;
     }
 
-    private static void compareOutput(int testNumber, String outputFile, String actualFile) throws FileNotFoundException, IOException {
-        System.out.print("Test: " + testNumber + " ");
+    private static boolean compareOutput(int testNumber, String outputFile, String actualFile) throws FileNotFoundException, IOException {
         Stream<String> expectedOutput = getReader(outputFile).lines();
         Stream<String> actualOutput = getReader(actualFile).lines();
         Iterator<String> iter1 = expectedOutput.iterator(), iter2 = actualOutput.iterator();
         while (iter1.hasNext() && iter2.hasNext()) {
-            String expected = iter1.next();
-            String actual = iter2.next();
-            if(!expected.equals(actual)) {
-                System.err.println("❌");
-                return;
-            }
+            if (!iter1.next.equals(iter2.next())) 
+                return false;
         }
-        if (iter1.hasNext() != iter2.hasNext()) {
-            System.out.println("❌");
-            return;
-        }
-        System.out.println("✅");
+        return (iter1.hasNext() == iter2.hasNext());
     }
 }
