@@ -22,18 +22,20 @@ public class Tester {
         String path = dir + SEPERATOR;
         int numberOfTests = numberOfTests(dir);
         for (int test=1; test <= numberOfTests; test++) {
-            String intputFile = test + INPUT;
+            String intputFile = path + test + INPUT;
             clearFileContents(ARTIFACT_FILE);
             long start = System.currentTimeMillis();
-            runUserSolution(solution, path + intputFile, ARTIFACT_FILE);
+            runUserSolution(solution, intputFile, ARTIFACT_FILE);
             long timeTakenInMillis = System.currentTimeMillis() - start;
             String outputFile = path + test + OUTPUT;
-            System.out.print("Test: "+ test + " ");
+            System.out.print("Test: "+ test + "/" + numberOfTests + " ");
             if (compareOutput(outputFile, ARTIFACT_FILE)) {
                 System.out.println("✅ ("+ timeTakenInMillis +"ms)");
             }
             else {
                 System.out.println("❌ (" + timeTakenInMillis + "ms)");
+                System.out.println("Input: ");
+                printContentOfFile(intputFile);
                 System.out.println("Expected: ");
                 printContentOfFile(outputFile);
                 System.err.println("Actual: ");
@@ -41,6 +43,7 @@ public class Tester {
                 return;
             }
         }
+        System.out.println("ACCEPTED!");
     }
 
     private static void printContentOfFile(String file) throws FileNotFoundException {
